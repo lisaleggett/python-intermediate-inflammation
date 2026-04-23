@@ -33,6 +33,11 @@ jobs:
       run: |
         python3 -m pytest --cov=inflammation.models tests/test_models.py
 
+    - name: Check style with Pylint
+      run: |
+        python3 -m pylint --fail-under=0 --reports=y inflammation
+        
+
     # - name: Update Coverage Badge
     #   # GitHub actions: default branch variable
     #   # https://stackoverflow.com/questions/64781462/github-actions-default-branch-variable
