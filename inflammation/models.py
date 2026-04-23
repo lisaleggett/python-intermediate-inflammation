@@ -7,6 +7,7 @@ inflammation data for a single patient taken over a number of days
 and each column represents a single day across all patients.
 """
 
+from matplotlib.pyplot import axis
 import numpy as np
 
 
@@ -46,3 +47,25 @@ def daily_min(data):
    :returns: An array of minimum values of measurements for each day.
    """
     return np.min(data, axis=0)
+
+def patient_normalise(data):
+    """
+    Normalise patient data between 0 and 1 of a 2D inflammation data array.
+
+    Any NaN values are ignored, and normalised to 0
+
+    :param data: 2D array of inflammation data
+    :type data: ndarray
+
+    """
+    if not isinstance(data, np.ndarray):
+        raise TypeError('data input should be ndarray')
+    if len(data.shape) != 2:
+        raise ValueError('inflammation array should be 2-dimensional')
+    if np.any(data < 0):
+        raise ValueError('inflammation values should be non-negative')
+    max_data = np.nanmax(data, axis=1)
+    with np.errstate(invalid='ignore', divide='ignore'):
+        normalised = data / max_data[:, np.newaxis]
+    normalised[np.isnan(normalised)] = 0
+    return normalised
